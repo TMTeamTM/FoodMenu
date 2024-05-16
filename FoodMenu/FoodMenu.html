@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINAV 476</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="checkbox"], input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            width: 100px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin-top: 5px;
+        }
+
+        #total {
+            width: 120px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Food And Drink Menu</h2>
+    <form action="#" method="post" id="dersForm">
+        <label>Meal 1</label> 
+        <input type="text" id="menu1" name="menu1"> 
+        <input type="checkbox" id="menu1checkbox" onchange="updateMenu('menu1');"> Sos Ekle (10TL) 
+        <input type="checkbox" id="menu1checkbox2" onchange="updateMenu('menu1');"> Malzeme Ekle  (50TL)    
+        <br><br>
+        <label>Meal 2</label> 
+        <input type="text" id="menu2" name="menu2"> 
+        <input type="checkbox" id="menu2checkbox" onchange="updateMenu('menu2');"> Sos Ekle (10TL)     
+        <input type="checkbox" id="menu2checkbox2" onchange="updateMenu('menu2');"> Malzeme Ekle  (50TL)    
+        <br><br>
+        <label>Drink 1</label> 
+        <input type="text" id="drink1radio" name="drink1radio"> 
+        <input type="radio" id="drink1radio1" name="service" value="30" onchange="updateRadio('service', 'drink1radio');"> Small  (30TL)
+        <input type="radio" id="drink1radio2" name="service" value="60" onchange="updateRadio('service', 'drink1radio');"> Medium (60TL)  
+        <br><br>
+        <label>Drink 2</label> 
+        <input type="text" id="drink2radio" name="drink2radio"> 
+        <input type="radio" id="drink2radio1"  name="service2" value="30" onchange="updateRadio('service2', 'drink2radio'); "> Small (30TL) 
+        <input type="radio" id="drink2radio2" name="service2" value="60" onchange="updateRadio('service2', 'drink2radio');"> Medium  (60TL) 
+    </form>
+    <br><br>
+    Toplam: <input type="text" id="total" readonly> <br><br>
+    <button onclick="calculateTotal()">Hesapla</button>
+    <button onclick="clearForm()">Temizle</button>
+
+    <script>
+        function updateMenu(menuId) {
+            let menuInput = document.getElementById(menuId);
+            let sauceCheckbox = document.getElementById(menuId + 'checkbox');
+            let ingredientCheckbox = document.getElementById(menuId + 'checkbox2');
+
+            let saucePrice = 10;
+            let ingredientPrice = 50;
+            let totalPrice = 0;
+
+            if (sauceCheckbox.checked) {
+                totalPrice += saucePrice;
+            }
+
+            if (ingredientCheckbox.checked) {
+                totalPrice += ingredientPrice;
+            }
+
+            menuInput.value = totalPrice + ' TL';
+        }
+
+        function updateRadio(serviceName, radioId) {
+            let radioInputs = document.getElementsByName(serviceName);
+            let totalPrice = 0;
+
+            for (let i = 0; i < radioInputs.length; i++) {
+                if (radioInputs[i].checked) {
+                    totalPrice += parseInt(radioInputs[i].value);
+                }
+            }
+            if(serviceName == "service2") {
+                let mealInput = document.getElementById("drink2radio");
+                mealInput.value = totalPrice + ' TL';
+            }
+            else if(serviceName == "service") {
+                let mealInput = document.getElementById("drink1radio");
+                mealInput.value = totalPrice + ' TL';
+            }
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            let inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                if (input.id !== 'total' && !isNaN(parseFloat(input.value))) {
+                    total += parseFloat(input.value);
+                }
+            });
+            document.getElementById('total').value = total + ' TL';
+        }
+
+        function clearForm() {
+            let inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            let radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.checked = false;
+            });
+
+            document.getElementById('total').value = '';
+        }
+        window.addEventListener('load', function () {
+                        let inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.value = '0TL';
+            });
+        });
+    </script>
+</body>
+</html>
